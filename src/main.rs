@@ -30,7 +30,6 @@ fn main() {
             let mut count = 0;
             for row_offset in [ROWS - 1, 0, 1].iter().cloned() {
                 for col_offset in [COLS - 1, 0, 1].iter().cloned() {
-                    // Alter this match statement to achieve different grid types
                     match game_rule.grid_type{
                         0 =>
                         match (current_row, row_offset, col_offset) {
@@ -69,7 +68,7 @@ fn main() {
         let mut cell_count: i32 = 0;
         (0..game_board.len()).for_each(|x: usize|{ if game_board[x].current { cell_count += 100; } });
         state_array.push_back(cell_count);
-        if similar_count >= 100 {
+        if similar_count >= 100 || cell_count == 0 {
             game_board = seed_board(get_rand_cells(&game_rule.initial_cells)); state_array.clear();
             game_rule = get_rand_rule();
             similar_count = 0; iteration_counter += 1;
@@ -147,10 +146,12 @@ fn get_rand_rule() -> LifeRule{
         LifeRule {birth_rule: vec![3,6], survive_rule: vec![2,3], grid_type: 0, initial_cells: [200,1500]},
         LifeRule {birth_rule: vec![3,6,7,8], survive_rule: vec![2,3,5,7,8], grid_type: 0, initial_cells: [200,1500]},
         LifeRule {birth_rule: vec![3,6,7,8], survive_rule: vec![2,3,5,7,8], grid_type: 0, initial_cells: [200,1500]},
-        LifeRule {birth_rule: vec![3,6,8], survive_rule: vec![2,3,4,5], grid_type: 0, initial_cells: [200,1500]},
         LifeRule {birth_rule: vec![3,8], survive_rule: vec![2,3], grid_type: 0, initial_cells: [200,1500]},
-        LifeRule {birth_rule: vec![2,3], survive_rule: vec![1,2,3,5], grid_type: 1, initial_cells: [200,300]}
+        LifeRule {birth_rule: vec![2,3], survive_rule: vec![1,2,3,5], grid_type: 1, initial_cells: [200,300]},
+        LifeRule {birth_rule: vec![1], survive_rule: vec![1,2,3,4,5,6], grid_type: 1, initial_cells: [1,2]},
+        LifeRule {birth_rule: vec![1], survive_rule: vec![1,2,3,4,5], grid_type: 1, initial_cells: [1,2]},
+        LifeRule {birth_rule: vec![1], survive_rule: vec![1,2,3,4], grid_type: 1, initial_cells: [1,2]},
+        LifeRule {birth_rule: vec![1], survive_rule: vec![1,2,3], grid_type: 1, initial_cells: [1,2]}
         ];
-    let random_rule = rand::thread_rng().gen_range(0..output_vec.len());
-    return output_vec[random_rule].clone();
+    return output_vec[rand::thread_rng().gen_range(0..output_vec.len())].clone();
 }
