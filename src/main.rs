@@ -69,8 +69,8 @@ fn main() {
         (0..game_board.len()).for_each(|x: usize|{ if game_board[x].current { cell_count += 100; } });
         state_array.push_back(cell_count);
         if similar_count >= 100 || cell_count == 0 {
-            game_board = seed_board(get_rand_cells(&game_rule.initial_cells)); state_array.clear();
             game_rule = get_rand_rule();
+            game_board = seed_board(get_rand_cells(&game_rule.initial_cells)); state_array.clear();
             similar_count = 0; iteration_counter += 1;
             continue;
         } else {
@@ -129,9 +129,10 @@ fn get_array_position(row: usize, col: usize) -> usize{
     (row * COLS + col) as usize
 }
 fn get_rand_cells(input_range: &[i32;2]) -> i32{
-    return rand::thread_rng().gen_range(input_range[0]..input_range[1]);
+    return rand::thread_rng().gen_range(input_range[0]..=input_range[1]);
 }
 fn get_rand_rule() -> LifeRule{
+    // Array of rule sets, alter as desired. 0 grid type is square 1 is hexagonal. Initial cells contains the top and bottom of the random cell insertion. 
     let output_vec = vec![
         LifeRule {birth_rule: vec![3,8], survive_rule: vec![2,3,8], grid_type: 0, initial_cells: [200,1500]},
         LifeRule {birth_rule: vec![3], survive_rule: vec![1,2], grid_type: 0, initial_cells: [200,1500]},
